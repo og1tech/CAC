@@ -1,0 +1,5 @@
+C:\Users\LEITESIS\Anaconda3\python.exe
+ C:\Projects\CAC\Python\convert_file_csv.py
+ //RBAMVLATAMTBLP/CAC_Datos/ECAS/AWS Datalake/Auxiliary/Access/Access.csv
+ c:/Projects/CAC/access_temp.csv
+ ANSI
