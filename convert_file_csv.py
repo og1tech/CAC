@@ -90,16 +90,16 @@ all_codecs = ['ascii', 'big5', 'big5hkscs', 'cp037', 'cp273', 'cp424', 'cp437',
               'utf_32', 'utf_32_be', 'utf_32_le', 'utf_16', 'utf_16_be', 'utf_16_le', 'utf_7',
               'utf_8', 'utf_8_sig']
 
-# Declare Variaveis
+# Declare general variables
 CR = "\r"
 CR_LF = '\r\n'
 LF = '\n'
 DELIMITER = "|"
-# obter parametros informados
+# Check parameters sent
 n = len(sys.argv)
 if n < 5:
     print(f"\nArguments number is invalid ({n})." +
-          "\nExecute convert_file_csv.py [source file name] [target file name] [encode source] [encode target] [delimiter]")
+          "\n>>>  convert_file_csv.py [source file name] [target file name] [encode source] [encode target] [delimiter]")
     exit(-1)
 
 SOURCE_FILE_NAME = sys.argv[1]
@@ -118,22 +118,23 @@ else:
     print(f"{SOURCE_FILE_NAME} - not found!")
     exit(-1)
 
-# verificar encode arquivo
+# Get encode from Source File
 encode_source = get_encode_type(SOURCE_FILE_NAME)
 
+# Get row number from Source Files
 row_lines = row_count(SOURCE_FILE_NAME, ENCODE_FILE_SOURCE)
 print(f"{SOURCE_FILE_NAME} - Encode Detect by get_encode_type: {encode_source} | Rows={row_lines}")
 
+# Open file target to write 
 file_target = open(TARGET_FILE_NAME, "w", encoding=ENCODE_FILE_TARGET, errors="ignore")
-print(f"\nInicio de processamento")
-with open(SOURCE_FILE_NAME, 'r', encoding=ENCODE_FILE_SOURCE) as file_source:
-    # Ler header e obter qtde de colunas (delimitador=|)
-    line: str = file_source.readline()
 
-    # Gravar header arquivo target
+print(f"\nStart of process file")
+with open(SOURCE_FILE_NAME, 'r', encoding=ENCODE_FILE_SOURCE) as file_source:
+    # read and write Head line
+    line: str = file_source.readline()
     file_target.writelines(line)
 
-    # setar variaveis de controle
+    # Setting value for variable
     no_delimiter_header = line.count(SOURCE_DELIMITER)
     no_lf = line.count(LF)
     no_delimiter_row: int = 0
@@ -143,9 +144,9 @@ with open(SOURCE_FILE_NAME, 'r', encoding=ENCODE_FILE_SOURCE) as file_source:
     buffer = ""
     write_row = ""
 
-    print(f"\nHeader Information - Header Delimiters = {no_delimiter_header} | Qtd LF={no_lf}   \n")
+    print(f"\nHeader Information - Header Delimiters = {no_delimiter_header} | qty LF={no_lf}   \n")
 
-    # processar todas linha do arquivo source
+    # Main Loop to process all rows on source file
     while line:
         try:
             line = file_source.readline()
@@ -163,9 +164,6 @@ with open(SOURCE_FILE_NAME, 'r', encoding=ENCODE_FILE_SOURCE) as file_source:
                     row_number_write += 1
                 else:
                     buffer += line
-
-            if row_number_read == 1197:
-                print(f"Atenção... linha={row_number_read}")
 
         except Exception:
             print(f" error - Read Row={row_number_read}  | Read Write={row_number_write}")
